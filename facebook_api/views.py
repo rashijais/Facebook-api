@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics,permissions
 from .serializers import *
@@ -31,18 +32,16 @@ class LogoutView(APIView):
 class RegisterAPIView(generics.CreateAPIView):
      permission_classes=(permissions.AllowAny,)
      serializer_class=RegisterSerializer
-     queryset= User.objects.all()
      model = User
 
      def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
         email = request.data.get('email')
-        check_data = {'username': username,'password': password,'email': email,'first_name': first_name,'last_name': last_name,}
+        check_data = {'username': username,'password': password,'email': email,}
         serializer = RegisterSerializer(data=check_data)
         if serializer.is_valid():
             user = serializer.save()
-            if user:
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
