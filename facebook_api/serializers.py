@@ -42,21 +42,22 @@ class LoginSerializer(serializers.Serializer):
                 )
         return data
 
-'''class PostSerializer(serializers.ModelSerializer):
+class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ('id','title','description','image','files','date_created','name','user')
-        read_only_fields = ('id','user')'''
+        fields = ('id','title','description','image','files','date_created','author')
+        read_only_fields = ('id','user')
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     email=serializers.EmailField(label='Email Address')
     password = serializers.CharField(style={'input_type': 'password'},required=True)
-    username=serializers.CharField(max_length=100)
+    username=serializers.CharField()
 
     class Meta:
         model = User
         fields = ('id', 'username', 'password', 'email')
+        #print(id)
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
